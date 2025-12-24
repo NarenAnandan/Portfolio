@@ -1,316 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Naren Anandan - Under Construction</title>
-    <link href="./css/font-awesome/css/all.min.css" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Courier New', monospace;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-            color: #00ff41;
-            overflow: hidden;
-            height: 100vh;
-        }
-        
-        .matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.1;
-        }
-        
-        .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .terminal {
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid #00ff41;
-            border-radius: 10px;
-            padding: 30px;
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
-        }
-        
-        .terminal-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #00ff41;
-        }
-        
-        .terminal-buttons {
-            display: flex;
-            gap: 8px;
-            margin-right: 15px;
-        }
-        
-        .btn-circle {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-        
-        .btn-red { background: #ff5f56; }
-        .btn-yellow { background: #ffbd2e; }
-        .btn-green { background: #27ca3f; }
-        
-        .terminal-title {
-            font-size: 14px;
-            color: #00ff41;
-        }
-        
-        .ascii-art {
-            font-size: 12px;
-            line-height: 1.2;
-            margin-bottom: 20px;
-            color: #00ff41;
-        }
-        
-        .typing-text {
-            font-size: 18px;
-            margin: 20px 0;
-            min-height: 50px;
-        }
-        
-        .cursor {
-            animation: blink 1s infinite;
-        }
-        
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-        
-        .progress-container {
-            margin: 30px 0;
-            text-align: left;
-        }
-        
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background: #333;
-            border: 1px solid #00ff41;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #00ff41, #00cc33);
-            width: 0%;
-            animation: loading 4s ease-in-out infinite;
-        }
-        
-        @keyframes loading {
-            0% { width: 0%; }
-            50% { width: 75%; }
-            100% { width: 100%; }
-        }
-        
-        .status-line {
-            display: flex;
-            justify-content: space-between;
-            margin: 5px 0;
-            font-size: 14px;
-        }
-        
-        .social-links {
-            margin-top: 30px;
-        }
-        
-        .social-links a {
-            color: #00ff41;
-            font-size: 24px;
-            margin: 0 15px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        
-        .social-links a:hover {
-            color: #ffffff;
-            text-shadow: 0 0 10px #00ff41;
-        }
-        
-        .eta {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #888;
-        }
-        
-        @media (max-width: 768px) {
-            .terminal { padding: 20px; margin: 10px; }
-            .ascii-art { font-size: 8px; }
-            .typing-text { font-size: 16px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Under Construction</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: #1a1a2e;
+    color: #ffffff;
+    font-family: "Courier New", monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .header h1 {
+    font-size: 3rem;
+    color: #00ff9f;
+    margin: 0;
+    text-shadow: 0 0 20px rgba(0, 255, 159, 0.5);
+  }
+  .header p {
+    font-size: 1.2rem;
+    color: #cccccc;
+    margin: 10px 0;
+  }
+  #terminal {
+    width: 90%;
+    max-width: 700px;
+    padding: 25px;
+    border: 2px solid #00ff9f;
+    border-radius: 10px;
+    background: #0f0f23;
+    box-shadow: 0 0 30px rgba(0, 255, 159, 0.3);
+  }
+  .terminal-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333;
+  }
+  .dots {
+    display: flex;
+    gap: 8px;
+    margin-right: 15px;
+  }
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  .red { background: #ff5f56; }
+  .yellow { background: #ffbd2e; }
+  .green { background: #27ca3f; }
+  .prompt {
+    color: #00ff9f;
+    font-size: 14px;
+  }
+  .line {
+    margin: 10px 0;
+    font-size: 16px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in forwards;
+  }
+  .line.success { color: #00ff9f; }
+  .line.warning { color: #ffbd2e; }
+  .line.info { color: #64b5f6; }
+  .line.error { color: #ff6b6b; }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+  .progress {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 8px;
+    background: #333;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff9f, #00cc7f);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  .progress-text {
+    color: #00ff9f;
+    font-weight: bold;
+    min-width: 40px;
+  }
+  @media (max-width: 768px) {
+    .header h1 { font-size: 2rem; }
+    #terminal { width: 95%; padding: 20px; }
+  }
+</style>
 </head>
 <body>
-    <canvas class="matrix-bg" id="matrix"></canvas>
-    
-    <div class="container">
-        <div class="terminal">
-            <div class="terminal-header">
-                <div class="terminal-buttons">
-                    <div class="btn-circle btn-red"></div>
-                    <div class="btn-circle btn-yellow"></div>
-                    <div class="btn-circle btn-green"></div>
-                </div>
-                <div class="terminal-title">naren@devops-portfolio:~$</div>
-            </div>
-            
-            <div class="ascii-art">
-    ____              ____            
-   |  _ \  _____   __/ __ \____  _____
-   | | | |/ _ \ \ / / |  | |  _ \/ ____|
-   | |_| |  __/\ V /| |__| | |_) \__ \
-   |____/ \___| \_/  \____/|  __/|___/
-                           | |        
-                           |_|        
-            </div>
-            
-            <div class="typing-text" id="typing-text"></div>
-            
-            <div class="progress-container">
-                <div class="status-line">
-                    <span>$ kubectl apply -f portfolio-v2.yaml</span>
-                    <span id="progress-percent">0%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill"></div>
-                </div>
-                <div class="status-line">
-                    <span>Status: Deploying...</span>
-                    <span id="status-text">Initializing</span>
-                </div>
-            </div>
-            
-            <div class="social-links">
-                <a href="https://www.linkedin.com/in/narenanandan/" title="LinkedIn">
-                    <i class="fab fa-linkedin"></i>
-                </a>
-                <a href="https://github.com/NarenAnandan" title="GitHub">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="mailto:narenanand23@gmail.com" title="Email">
-                    <i class="fas fa-envelope"></i>
-                </a>
-            </div>
-            
-            <div class="eta">
-                <p>🚀 Portfolio v2.0 deployment in progress...</p>
-                <p>ETA: Soon™</p>
-            </div>
-        </div>
+  <div class="header">
+    <h1>🚧 Under Construction</h1>
+    <p>Portfolio is being upgraded with new features</p>
+  </div>
+  
+  <div id="terminal">
+    <div class="terminal-header">
+      <div class="dots">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+      </div>
+      <div class="prompt">deployment@portfolio:~$</div>
     </div>
+    
+    <div id="content"></div>
+    
+    <div class="progress">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <span class="progress-text" id="progress-text">0%</span>
+    </div>
+  </div>
 
-    <script>
-        // Matrix rain effect
-        const canvas = document.getElementById('matrix');
-        const ctx = canvas.getContext('2d');
-        
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        
-        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
-        const matrixArray = matrix.split("");
-        
-        const fontSize = 10;
-        const columns = canvas.width / fontSize;
-        const drops = [];
-        
-        for(let x = 0; x < columns; x++) {
-            drops[x] = 1;
-        }
-        
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(15, 15, 35, 0.04)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.fillStyle = '#00ff41';
-            ctx.font = fontSize + 'px monospace';
-            
-            for(let i = 0; i < drops.length; i++) {
-                const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                
-                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-        }
-        
-        setInterval(drawMatrix, 35);
-        
-        // Typing animation
-        const messages = [
-            "Initializing DevOps pipeline...",
-            "Containerizing applications...",
-            "Setting up CI/CD workflows...",
-            "Configuring cloud infrastructure...",
-            "Implementing monitoring solutions...",
-            "Optimizing deployment strategies...",
-            "Portfolio upgrade in progress..."
-        ];
-        
-        let messageIndex = 0;
-        let charIndex = 0;
-        const typingElement = document.getElementById('typing-text');
-        
-        function typeMessage() {
-            if (charIndex < messages[messageIndex].length) {
-                typingElement.innerHTML = messages[messageIndex].substring(0, charIndex + 1) + '<span class="cursor">_</span>';
-                charIndex++;
-                setTimeout(typeMessage, 100);
-            } else {
-                setTimeout(() => {
-                    charIndex = 0;
-                    messageIndex = (messageIndex + 1) % messages.length;
-                    typeMessage();
-                }, 2000);
-            }
-        }
-        
-        // Progress animation
-        const statuses = ["Initializing", "Building", "Testing", "Deploying", "Finalizing"];
-        let statusIndex = 0;
-        let progress = 0;
-        
-        function updateProgress() {
-            progress += Math.random() * 15;
-            if (progress > 100) progress = 0;
-            
-            document.getElementById('progress-percent').textContent = Math.floor(progress) + '%';
-            document.getElementById('status-text').textContent = statuses[Math.floor(progress / 20) % statuses.length];
-        }
-        
-        // Start animations
-        typeMessage();
-        setInterval(updateProgress, 1000);
-        
-        // Resize handler
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-    </script>
+<script>
+const commands = [
+  { text: "$ Starting deployment process...", type: "info" },
+  { text: "✓ Initializing build environment", type: "success" },
+  { text: "📦 Installing dependencies", type: "info" },
+  { text: "🔧 Configuring services", type: "warning" },
+  { text: "🏗️  Building application", type: "info" },
+  { text: "🧪 Running tests", type: "success" },
+  { text: "🚀 Deploying to production", type: "success" },
+  { text: "⏳ Finalizing deployment", type: "warning" },
+  { text: "✅ Deployment complete - Coming soon!", type: "success" }
+];
+
+let index = 0;
+
+function updateProgress() {
+  const progress = Math.min(100, ((index + 1) / commands.length) * 100);
+  document.getElementById('progress-fill').style.width = progress + '%';
+  document.getElementById('progress-text').textContent = Math.floor(progress) + '%';
+}
+
+function showNext() {
+  const content = document.getElementById("content");
+  if (index < commands.length) {
+    const div = document.createElement("div");
+    div.className = `line ${commands[index].type}`;
+    div.textContent = commands[index].text;
+    content.appendChild(div);
+    updateProgress();
+    index++;
+    setTimeout(showNext, 1800);
+  } else {
+    setTimeout(() => {
+      content.innerHTML = "";
+      index = 0;
+      document.getElementById('progress-fill').style.width = '0%';
+      document.getElementById('progress-text').textContent = '0%';
+      showNext();
+    }, 4000);
+  }
+}
+
+showNext();
+</script>
 </body>
 </html>
