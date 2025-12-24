@@ -264,6 +264,61 @@ footer a:not(.nav-link) {
     left: 50%;
     margin-left: -60px;
   }
+  
+  /* Mobile optimizations */
+  .intro-title {
+    font-size: 2rem !important;
+  }
+  
+  .lead {
+    font-size: 1rem !important;
+  }
+  
+  .container-narrow {
+    padding: 0 15px;
+  }
+  
+  .card {
+    margin-bottom: 1rem;
+  }
+  
+  .social-nav .nav-link {
+    padding: 0 0.3rem;
+    font-size: 1rem;
+  }
+}
+
+/* Tablet breakpoint */
+@media (max-width: 768px) {
+  .wave-bg {
+    height: 150px;
+    min-width: 100%;
+  }
+  
+  .intro-title {
+    font-size: 2.5rem;
+  }
+  
+  .section {
+    padding-top: 2rem !important;
+  }
+}
+
+/* Large mobile breakpoint */
+@media (max-width: 480px) {
+  .intro-title {
+    font-size: 1.8rem !important;
+  }
+  
+  .btn {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+  
+  .card-header img {
+    width: 32px !important;
+    height: 32px !important;
+  }
 }
 
 .entry-title a {
