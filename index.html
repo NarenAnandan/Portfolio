@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Under Construction</title>
 <style>
   body {
@@ -102,19 +102,76 @@
     font-weight: bold;
     min-width: 40px;
   }
+  /* Universal mobile optimizations */
   @media (max-width: 768px) {
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
     .header h1 { font-size: 2rem; }
     #terminal { width: 95%; padding: 20px; }
     .line { font-size: 14px; }
   }
   
+  /* Large phones (iPhone 14 Plus, Samsung Galaxy S23+) */
   @media (max-width: 480px) {
-    .header h1 { font-size: 1.5rem; }
+    .header h1 { font-size: 1.8rem; }
     .header p { font-size: 1rem; }
     #terminal { width: 98%; padding: 15px; }
     .line { font-size: 13px; }
-    .progress { flex-direction: column; gap: 10px; }
-    .progress-text { min-width: auto; }
+    .progress { gap: 10px; }
+  }
+  
+  /* Standard phones (iPhone 14, Samsung Galaxy S23) */
+  @media (max-width: 430px) {
+    body { padding: 10px; }
+    .header { margin-bottom: 20px; }
+    .header h1 { 
+      font-size: 1.6rem;
+      line-height: 1.2;
+    }
+    .header p { font-size: 0.9rem; }
+    #terminal { 
+      width: 100%;
+      padding: 12px;
+      box-sizing: border-box;
+    }
+    .line { 
+      font-size: 12px;
+      margin: 8px 0;
+      word-break: break-word;
+    }
+    .progress-bar { height: 6px; }
+    .progress-text { font-size: 12px; }
+  }
+  
+  /* Compact phones (iPhone SE, iPhone 12 mini) */
+  @media (max-width: 375px) {
+    .header h1 { font-size: 1.4rem; }
+    .header p { font-size: 0.85rem; }
+    #terminal { padding: 10px; }
+    .terminal-header {
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+    }
+    .dots { gap: 5px; margin-right: 8px; }
+    .dot { width: 8px; height: 8px; }
+    .prompt { font-size: 11px; }
+    .line { font-size: 11px; margin: 6px 0; }
+    .progress { margin: 12px 0; gap: 8px; }
+  }
+  
+  /* Very small phones (older Android, iPhone SE 1st gen) */
+  @media (max-width: 320px) {
+    body { padding: 5px; }
+    .header { margin-bottom: 15px; }
+    .header h1 { font-size: 1.2rem; }
+    .header p { font-size: 0.8rem; }
+    #terminal { padding: 8px; }
+    .line { font-size: 10px; margin: 5px 0; }
+    .progress { margin: 10px 0; }
+    .progress-bar { height: 4px; }
+    .progress-text { font-size: 10px; }
   }
 </style>
 </head>
