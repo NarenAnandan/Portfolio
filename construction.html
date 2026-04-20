@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Under Construction</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: #1a1a2e;
+    color: #ffffff;
+    font-family: "Courier New", monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .header h1 {
+    font-size: 3rem;
+    color: #00ff9f;
+    margin: 0;
+    text-shadow: 0 0 20px rgba(0, 255, 159, 0.5);
+  }
+  .header p {
+    font-size: 1.2rem;
+    color: #cccccc;
+    margin: 10px 0;
+  }
+  #terminal {
+    width: 90%;
+    max-width: 700px;
+    padding: 25px;
+    border: 2px solid #00ff9f;
+    border-radius: 10px;
+    background: #0f0f23;
+    box-shadow: 0 0 30px rgba(0, 255, 159, 0.3);
+  }
+  .terminal-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333;
+  }
+  .dots {
+    display: flex;
+    gap: 8px;
+    margin-right: 15px;
+  }
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  .red { background: #ff5f56; }
+  .yellow { background: #ffbd2e; }
+  .green { background: #27ca3f; }
+  .prompt {
+    color: #00ff9f;
+    font-size: 14px;
+  }
+  .line {
+    margin: 10px 0;
+    font-size: 16px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in forwards;
+  }
+  .line.success { color: #00ff9f; }
+  .line.warning { color: #ffbd2e; }
+  .line.info { color: #64b5f6; }
+  .line.error { color: #ff6b6b; }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+  .progress {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 8px;
+    background: #333;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff9f, #00cc7f);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  .progress-text {
+    color: #00ff9f;
+    font-weight: bold;
+    min-width: 40px;
+  }
+  /* Universal mobile optimizations */
+  @media (max-width: 768px) {
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+    .header h1 { font-size: 2rem; }
+    #terminal { width: 95%; padding: 20px; }
+    .line { font-size: 14px; }
+  }
+  
+  /* Large phones (iPhone 14 Plus, Samsung Galaxy S23+) */
+  @media (max-width: 480px) {
+    .header h1 { font-size: 1.8rem; }
+    .header p { font-size: 1rem; }
+    #terminal { width: 98%; padding: 15px; }
+    .line { font-size: 13px; }
+    .progress { gap: 10px; }
+  }
+  
+  /* Standard phones (iPhone 14, Samsung Galaxy S23) */
+  @media (max-width: 430px) {
+    body { padding: 10px; }
+    .header { margin-bottom: 20px; }
+    .header h1 { 
+      font-size: 1.6rem;
+      line-height: 1.2;
+    }
+    .header p { font-size: 0.9rem; }
+    #terminal { 
+      width: 100%;
+      padding: 12px;
+      box-sizing: border-box;
+    }
+    .line { 
+      font-size: 12px;
+      margin: 8px 0;
+      word-break: break-word;
+    }
+    .progress-bar { height: 6px; }
+    .progress-text { font-size: 12px; }
+  }
+  
+  /* Compact phones (iPhone SE, iPhone 12 mini) */
+  @media (max-width: 375px) {
+    .header h1 { font-size: 1.4rem; }
+    .header p { font-size: 0.85rem; }
+    #terminal { padding: 10px; }
+    .terminal-header {
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+    }
+    .dots { gap: 5px; margin-right: 8px; }
+    .dot { width: 8px; height: 8px; }
+    .prompt { font-size: 11px; }
+    .line { font-size: 11px; margin: 6px 0; }
+    .progress { margin: 12px 0; gap: 8px; }
+  }
+  
+  /* Very small phones (older Android, iPhone SE 1st gen) */
+  @media (max-width: 320px) {
+    body { padding: 5px; }
+    .header { margin-bottom: 15px; }
+    .header h1 { font-size: 1.2rem; }
+    .header p { font-size: 0.8rem; }
+    #terminal { padding: 8px; }
+    .line { font-size: 10px; margin: 5px 0; }
+    .progress { margin: 10px 0; }
+    .progress-bar { height: 4px; }
+    .progress-text { font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>🚧 Under Construction</h1>
+    <p>Portfolio is being upgraded with new features</p>
+  </div>
+  
+  <div id="terminal">
+    <div class="terminal-header">
+      <div class="dots">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+      </div>
+      <div class="prompt">deployment@portfolio:~$</div>
+    </div>
+    
+    <div id="content"></div>
+    
+    <div class="progress">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <span class="progress-text" id="progress-text">0%</span>
+    </div>
+  </div>
+
+<script>
+const commands = [
+  { text: "$ Starting deployment process...", type: "info" },
+  { text: "✓ Initializing build environment", type: "success" },
+  { text: "📦 Installing dependencies", type: "info" },
+  { text: "🔧 Configuring services", type: "warning" },
+  { text: "🏗️  Building application", type: "info" },
+  { text: "🧪 Running tests", type: "success" },
+  { text: "🚀 Deploying to production", type: "success" },
+  { text: "⏳ Finalizing deployment", type: "warning" },
+  { text: "✅ Deployment complete - Coming soon!", type: "success" }
+];
+
+let index = 0;
+
+function updateProgress() {
+  const progress = Math.min(100, ((index + 1) / commands.length) * 100);
+  document.getElementById('progress-fill').style.width = progress + '%';
+  document.getElementById('progress-text').textContent = Math.floor(progress) + '%';
+}
+
+function showNext() {
+  const content = document.getElementById("content");
+  if (index < commands.length) {
+    const div = document.createElement("div");
+    div.className = `line ${commands[index].type}`;
+    div.textContent = commands[index].text;
+    content.appendChild(div);
+    updateProgress();
+    index++;
+    setTimeout(showNext, 1800);
+  } else {
+    setTimeout(() => {
+      content.innerHTML = "";
+      index = 0;
+      document.getElementById('progress-fill').style.width = '0%';
+      document.getElementById('progress-text').textContent = '0%';
+      showNext();
+    }, 4000);
+  }
+}
+
+showNext();
+</script>
+</body>
+</html>
