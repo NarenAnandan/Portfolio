@@ -36,14 +36,21 @@ if (!detectWebGL(canvas)) {
   initScroll(world, () => {});
   initReveal();
 
-  const start = performance.now();
-  const loop = () => {
-    requestAnimationFrame(loop);
-    if (document.hidden) return;
-    const elapsed = (performance.now() - start) / 1000;
-    pipeline.update(elapsed);
-    tower.update(elapsed);
+  if (reduced) {
+    // prefers-reduced-motion: render a single static frame (camera parked by
+    // initScroll) and re-render on resize — no ambient/looping animation.
     composer.render();
-  };
-  loop();
+    window.addEventListener('resize', () => composer.render());
+  } else {
+    const start = performance.now();
+    const loop = () => {
+      requestAnimationFrame(loop);
+      if (document.hidden) return;
+      const elapsed = (performance.now() - start) / 1000;
+      pipeline.update(elapsed);
+      tower.update(elapsed);
+      composer.render();
+    };
+    loop();
+  }
 }

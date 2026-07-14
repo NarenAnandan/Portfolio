@@ -133,6 +133,6 @@ export function renderContent(root: HTMLElement, data: Resume): void {
     `<a href="${p.linkedin}" target="_blank" rel="noopener noreferrer">LinkedIn</a>` +
     `<a href="${p.github}" target="_blank" rel="noopener noreferrer">GitHub</a>`;
   contact.appendChild(foot);
-  contact.appendChild(el('p', 'copyright', `© 2026 ${p.name}. All rights reserved.`));
+  contact.appendChild(el('p', 'copyright', `© ${new Date().getFullYear()} ${p.name}. All rights reserved.`));
   root.appendChild(contact);
 }
