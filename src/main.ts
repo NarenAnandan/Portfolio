@@ -3,6 +3,7 @@ import { resume } from './content/resume';
 import { detectWebGL, deviceTier } from './world/capability';
 import { createWorld } from './world/renderer';
 import { buildCity } from './world/city';
+import { buildPipeline } from './world/pipeline';
 import './styles/main.css';
 
 const content = document.getElementById('content') as HTMLElement;
@@ -15,8 +16,16 @@ if (detectWebGL(canvas)) {
   const tier = deviceTier(window.innerWidth, navigator.hardwareConcurrency ?? 4, reduced);
   const world = createWorld(canvas, tier);
   world.add(buildCity());
+  const pipeline = buildPipeline();
+  world.add(pipeline.group);
   window.addEventListener('resize', world.onResize);
-  const loop = () => { world.render(); requestAnimationFrame(loop); };
+  let start = performance.now();
+  const loop = () => {
+    const elapsed = (performance.now() - start) / 1000;
+    pipeline.update(elapsed);
+    world.render();
+    requestAnimationFrame(loop);
+  };
   loop();
 } else {
   document.body.classList.add('no-webgl');
