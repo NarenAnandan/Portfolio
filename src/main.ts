@@ -2,6 +2,7 @@ import { renderContent } from './content/render';
 import { resume } from './content/resume';
 import { detectWebGL, deviceTier } from './world/capability';
 import { createWorld } from './world/renderer';
+import { createComposer } from './world/postprocess';
 import { buildCity } from './world/city';
 import { buildPipeline } from './world/pipeline';
 import { buildCluster } from './world/cluster';
@@ -23,13 +24,15 @@ if (detectWebGL(canvas)) {
   world.add(buildCluster());
   const tower = buildTower();
   world.add(tower.group);
-  window.addEventListener('resize', world.onResize);
+  const composer = createComposer(world, tier);
+  window.removeEventListener('resize', world.onResize);
+  window.addEventListener('resize', composer.onResize);
   let start = performance.now();
   const loop = () => {
     const elapsed = (performance.now() - start) / 1000;
     pipeline.update(elapsed);
     tower.update(elapsed);
-    world.render();
+    composer.render();
     requestAnimationFrame(loop);
   };
   loop();
