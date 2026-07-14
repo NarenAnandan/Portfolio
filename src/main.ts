@@ -4,6 +4,8 @@ import { detectWebGL, deviceTier } from './world/capability';
 import { createWorld } from './world/renderer';
 import { buildCity } from './world/city';
 import { buildPipeline } from './world/pipeline';
+import { buildCluster } from './world/cluster';
+import { buildTower } from './world/tower';
 import './styles/main.css';
 
 const content = document.getElementById('content') as HTMLElement;
@@ -18,11 +20,15 @@ if (detectWebGL(canvas)) {
   world.add(buildCity());
   const pipeline = buildPipeline();
   world.add(pipeline.group);
+  world.add(buildCluster());
+  const tower = buildTower();
+  world.add(tower.group);
   window.addEventListener('resize', world.onResize);
   let start = performance.now();
   const loop = () => {
     const elapsed = (performance.now() - start) / 1000;
     pipeline.update(elapsed);
+    tower.update(elapsed);
     world.render();
     requestAnimationFrame(loop);
   };
