@@ -47,6 +47,15 @@ build/Release
 # Dependency directories
 node_modules/
 
+# Build output
+dist/
+
+# Local tooling / scratch
+.superpowers/
+test-results/
+.serena/
+playwright-report/
+
 # Optional npm cache directory
 .npm
 
