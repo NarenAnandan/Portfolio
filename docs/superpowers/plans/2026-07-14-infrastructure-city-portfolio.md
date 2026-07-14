@@ -242,10 +242,15 @@ describe('resume data', () => {
   });
 
   it('never contains invented placeholder numbers outside TODO markers', () => {
-    // Guard: any bracketed placeholder must be an explicit TODO
-    const json = JSON.stringify(resume);
-    const brackets = json.match(/\[[^\]]*\]/g) ?? [];
-    for (const b of brackets) expect(b).toMatch(/\[TODO/);
+    // Guard: any bracketed placeholder inside TEXT CONTENT must be an explicit TODO.
+    // Scan only string leaf values so structural JSON array brackets are excluded.
+    const strings: string[] = [];
+    JSON.stringify(resume, (_k, v) => {
+      if (typeof v === 'string') strings.push(v);
+      return v;
+    });
+    const brackets = strings.join('\n').match(/\[[^\]]*\]/g) ?? [];
+    for (const b of brackets) expect(b).toMatch(/^\[TODO/);
   });
 });
 ```
