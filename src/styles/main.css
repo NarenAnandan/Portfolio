@@ -103,6 +103,14 @@ body { line-height: 1.6; -webkit-font-smoothing: antialiased; }
   .section > * { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
 
+@media (max-width: 767px) {
+  .section { padding: 10vh 7vw; min-height: auto; margin: 8vh auto; }
+  .hero-name { font-size: clamp(2.2rem, 12vw, 3.2rem); }
+  .tech-grid, .metric-row { grid-template-columns: 1fr 1fr; }
+  /* Stronger panel backing so text stays legible over the 3D scene on small screens */
+  .section { background: rgba(7, 11, 20, 0.55); border-radius: 16px; backdrop-filter: blur(4px); }
+}
+
 /* WebGL-off fallback: solid gradient backdrop instead of canvas */
 body.no-webgl { background: radial-gradient(1200px 800px at 70% 0%, var(--bg-2), var(--bg)); }
 body.no-webgl #scene { display: none; }

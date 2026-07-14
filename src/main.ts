@@ -38,11 +38,12 @@ if (!detectWebGL(canvas)) {
 
   const start = performance.now();
   const loop = () => {
+    requestAnimationFrame(loop);
+    if (document.hidden) return;
     const elapsed = (performance.now() - start) / 1000;
     pipeline.update(elapsed);
     tower.update(elapsed);
     composer.render();
-    requestAnimationFrame(loop);
   };
   loop();
 }
