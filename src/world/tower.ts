@@ -22,15 +22,7 @@ export function buildTower(): { group: THREE.Group; update(t: number): void } {
     rings.push(ring);
   }
 
-  // Ground plane + HQ marker far down the path.
-  const ground = new THREE.Mesh(
-    new THREE.PlaneGeometry(200, 200),
-    surfaceMaterial(PALETTE.bg),
-  );
-  ground.rotation.x = -Math.PI / 2;
-  ground.position.set(0, -0.5, -60);
-  group.add(ground);
-
+  // HQ marker far down the path (the global light-table ground lives in renderer).
   const hq = new THREE.Mesh(new THREE.IcosahedronGeometry(3, 0), glowMaterial(PALETTE.amber));
   hq.position.set(-14, 4, -40); // world (-14+14=0? ) -> local so it lands near z=-84 world
   group.add(hq);

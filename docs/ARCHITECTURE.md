@@ -11,10 +11,10 @@ The site is three independent layers wired together in `src/main.ts`.
 
 ## 2. World (`src/world/`)
 - `capability.ts` — pure WebGL detection + device-tier logic (unit-tested).
-- `renderer.ts` — `createWorld(canvas, tier)`: scene, camera, lights, resize.
-- `materials.ts` — shared palette + emissive/surface materials.
+- `renderer.ts` — `createWorld(canvas, tier)`: light scene, hemisphere + shadow-casting key light, the light-table ground, resize, and shadow enabling.
+- `materials.ts` — shared "light-table" palette + matte surface / accent materials.
 - `city.ts`, `pipeline.ts`, `cluster.ts`, `tower.ts` — procedural landmarks.
-- `postprocess.ts` — bloom (skipped on low tier).
+- `postprocess.ts` — render pass-through (the light look uses matte shading + soft shadows, no bloom).
 
 ## 3. Scroll (`src/scroll/`)
 - `path.ts` — the camera `CatmullRomCurve3` and `poseAt(progress)` math
@@ -25,8 +25,8 @@ The site is three independent layers wired together in `src/main.ts`.
 
 ## Data flow
 Scroll position → GSAP ScrollTrigger → `poseAt(progress)` → camera transform.
-The render loop animates the pipeline packets and tower rings and renders via
-the bloom composer.
+The render loop animates the pipeline packets and tower rings and renders the
+scene. Under `prefers-reduced-motion` it renders a single static frame instead.
 
 ## Progressive enhancement
 `main.ts` checks `detectWebGL()`. If false, it adds `body.no-webgl` (canvas

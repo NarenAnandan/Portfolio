@@ -31,7 +31,7 @@ npm run dev      # http://localhost:5173
   résumé here.** See [docs/CONTENT.md](docs/CONTENT.md).
 - `src/world/` — the procedural 3D scene (city, pipeline, cluster, tower).
 - `src/scroll/` — camera path math + GSAP/Lenis scroll wiring + reveals.
-- `src/styles/main.css` — the "control-room" design system.
+- `src/styles/main.css` — the "Schematic Light-Table" design system (bright, Clash Display + Inter + JetBrains Mono, cobalt/signal accents).
 - `docs/` — architecture, content, and deployment guides.
 
 ## Accessibility & resilience

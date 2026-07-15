@@ -12,11 +12,11 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "three": "^0.169.0",
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
     "gsap": "^3.12.5",
     "lenis": "^1.1.13",
-    "@fontsource/space-grotesk": "^5.1.0",
-    "@fontsource/ibm-plex-mono": "^5.1.0"
+    "three": "^0.169.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.47.0",
