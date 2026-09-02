@@ -1,0 +1,5 @@
+# Security contact for portfolio-bf3e6.web.app
+Contact: mailto:narenanand23@gmail.com
+Expires: 2027-09-01T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://portfolio-bf3e6.web.app/.well-known/security.txt
