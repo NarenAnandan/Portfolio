@@ -1,5 +1,16 @@
 # Portfolio — Narendiran Anandan
 
+[![Deploy to Firebase Hosting](https://github.com/NarenAnandan/Portfolio/actions/workflows/firebase-hosting-merge.yml/badge.svg?branch=main)](https://github.com/NarenAnandan/Portfolio/actions/workflows/firebase-hosting-merge.yml)
+[![Live site](https://img.shields.io/badge/live-portfolio--bf3e6.web.app-14684A?style=flat-square&logo=googlechrome&logoColor=white)](https://portfolio-bf3e6.web.app)
+[![Hosting](https://img.shields.io/badge/hosting-Firebase%20Spark-FFCA28?style=flat-square&logo=firebase&logoColor=black)](#hosting)
+[![License](https://img.shields.io/badge/license-Apache%202.0-16211F?style=flat-square)](LICENSE)
+
+[![Dependencies](https://img.shields.io/badge/runtime%20dependencies-none-14684A?style=flat-square)](#layout)
+[![Payload](https://img.shields.io/badge/payload-464%20KB-14684A?style=flat-square)](#layout)
+[![CSP](https://img.shields.io/badge/CSP-strict%2C%20no%20unsafe--inline-14684A?style=flat-square)](#security-posture)
+[![Contrast](https://img.shields.io/badge/contrast-WCAG%20AA-14684A?style=flat-square)](#editing-rules)
+[![Trackers](https://img.shields.io/badge/analytics%20%26%20cookies-none-14684A?style=flat-square)](#security-posture)
+
 Personal site for **Narendiran (Naren) Anandan**, DevOps & platform engineer.
 Hand-written HTML, CSS and vanilla JS. No framework, no build step, no runtime
 dependency, no third-party request, no analytics, no cookies.
