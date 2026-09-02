@@ -30,13 +30,9 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Verify no inline script or style slipped into the HTML
-        run: |
-          if grep -nE '<script>|<style>|[[:space:]]style="|on(click|load|error|mouseover)=' -- *.html; then
-            echo "::error::Inline script/style found. The site ships a strict CSP with no 'unsafe-inline'."
-            exit 1
-          fi
-          echo "No inline script or style found."
+      # Last line of defence — PR checks should have caught anything here first.
+      - name: Run site checks
+        run: python3 .github/scripts/check-site.py
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@500ac625ca2dd40cbd15f7659af953801858032a # v0.11.0

@@ -1,12 +1,13 @@
 # Portfolio — Narendiran Anandan
 
 [![Deploy to Firebase Hosting](https://github.com/NarenAnandan/Portfolio/actions/workflows/firebase-hosting-merge.yml/badge.svg?branch=main)](https://github.com/NarenAnandan/Portfolio/actions/workflows/firebase-hosting-merge.yml)
+[![PR checks](https://github.com/NarenAnandan/Portfolio/actions/workflows/pr-checks.yml/badge.svg)](https://github.com/NarenAnandan/Portfolio/actions/workflows/pr-checks.yml)
 [![Live site](https://img.shields.io/badge/live-portfolio--bf3e6.web.app-14684A?style=flat-square&logo=googlechrome&logoColor=white)](https://portfolio-bf3e6.web.app)
 [![Hosting](https://img.shields.io/badge/hosting-Firebase%20Spark-FFCA28?style=flat-square&logo=firebase&logoColor=black)](#hosting)
 [![License](https://img.shields.io/badge/license-Apache%202.0-16211F?style=flat-square)](LICENSE)
 
 [![Dependencies](https://img.shields.io/badge/runtime%20dependencies-none-14684A?style=flat-square)](#layout)
-[![Payload](https://img.shields.io/badge/payload-464%20KB-14684A?style=flat-square)](#layout)
+[![Payload](https://img.shields.io/badge/payload-421%20KB-14684A?style=flat-square)](#layout)
 [![CSP](https://img.shields.io/badge/CSP-strict%2C%20no%20unsafe--inline-14684A?style=flat-square)](#security-posture)
 [![Contrast](https://img.shields.io/badge/contrast-WCAG%20AA-14684A?style=flat-square)](#editing-rules)
 [![Trackers](https://img.shields.io/badge/analytics%20%26%20cookies-none-14684A?style=flat-square)](#security-posture)
@@ -17,9 +18,10 @@ dependency, no third-party request, no analytics, no cookies.
 
 Live: <https://portfolio-bf3e6.web.app>
 
-Total deployed payload is **~464 KB**; a cold first visit pulls roughly **160 KB**
+Total deployed payload is **421 KB**; a cold first visit pulls roughly **160 KB**
 (HTML + CSS + JS + the two latin font subsets). Repeat visits are near-free —
-fonts and images are served `immutable` for a year.
+fonts and images are served `immutable` for a year. CI fails the build above a
+600 KB budget.
 
 ## Layout
 
@@ -35,7 +37,8 @@ images/                     Certification badges — currently unreferenced by t
 favicon.svg
 robots.txt  sitemap.xml  .well-known/security.txt
 firebase.json               Hosting config, including every security header
-.github/workflows/          Deploy on push to main
+.github/workflows/          Deploy on push to main; checks + preview on every PR
+.github/scripts/            check-site.py — the pre-merge checks, runnable locally
 ```
 
 `scripts/site.js` is entirely progressive enhancement — the page is complete and
@@ -182,6 +185,37 @@ headers, so the CSP would degrade to the `<meta>` fallback alone: no
 `portfolio-bf3e6.web.app` on purpose. **`narenanandan.com` currently serves a
 separate résumé site, not this repo.** Update all four together once that domain
 points here.
+
+## Checks
+
+`.github/scripts/check-site.py` guards the things that fail *silently* in a
+browser — the class of regression a human reading a diff will not catch. Zero
+dependencies, no network. Run it before pushing:
+
+```bash
+python3 .github/scripts/check-site.py
+```
+
+| Check | Catches |
+| --- | --- |
+| No inline `<script>` / `<style>` / `style=` / `on*=` | Silent CSP breakage — the browser drops it with no error |
+| Every local `href`/`src` resolves | Dangling asset references after a rename |
+| `target="_blank"` carries `rel="noopener"` | Tabnabbing regression |
+| Payload within 600 KB | An unoptimised image slipping in |
+| `security.txt` has not expired | The `Expires` date lapsing unnoticed |
+
+It runs on every pull request (`pr-checks.yml`) and again on the deploy job as a
+last line of defence.
+
+**Preview deploys.** Once the checks pass, each PR from this repo also gets a
+Firebase preview channel — a real URL, with the real response headers, expiring
+after seven days. That is the only way to exercise the CSP before merge; a plain
+static server won't show it. Fork PRs skip this job, since they cannot read
+secrets.
+
+The PR workflow is deliberately separate from the deploy workflow. That one has
+exactly one job — ship to the live channel — and nothing in the PR workflow can
+reach it.
 
 ## Local preview
 

@@ -1,0 +1,55 @@
+name: PR checks
+
+# Deliberately separate from the deploy workflow. That one has exactly one job —
+# ship to the live channel — and nothing here can reach it.
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Site checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      # Zero dependencies, no network — same script you can run locally.
+      - name: Run site checks
+        run: python3 .github/scripts/check-site.py
+
+  preview:
+    name: Preview deploy
+    needs: checks
+    # Fork PRs cannot read secrets, so skip rather than fail the run.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write # to comment the preview URL on the pull request
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      # No channelId means a temporary preview channel, not the live site.
+      # This is the only way to exercise the real response headers before merge.
+      - name: Deploy to a preview channel
+        uses: FirebaseExtended/action-hosting-deploy@500ac625ca2dd40cbd15f7659af953801858032a # v0.11.0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PORTFOLIO_BF3E6 }}
+          projectId: portfolio-bf3e6
+          expires: 7d
