@@ -20,8 +20,9 @@ Live: <https://portfolio-bf3e6.web.app>
 
 Total deployed payload is **421 KB**; a cold first visit pulls roughly **160 KB**
 (HTML + CSS + JS + the two latin font subsets). Repeat visits are near-free —
-fonts and images are served `immutable` for a year. CI fails the build above a
-600 KB budget.
+fonts and images are served `immutable` for a year while HTML is
+`must-revalidate`, so a deploy is visible immediately. CI fails the build above
+a 600 KB budget.
 
 ## Layout
 
@@ -129,7 +130,10 @@ Two accessibility floors are baked into the tokens and worth not regressing:
   authoritative copy, and the only place `frame-ancestors` has any effect) and
   as a `<meta http-equiv>` fallback so the policy still applies when a file is
   opened directly from disk.
-* HSTS with `preload`, `X-Content-Type-Options: nosniff`,
+* HSTS with `preload` — note that on a `*.web.app` domain Firebase overrides
+  this with its own zone-wide value (`max-age=31556926`), so the configured
+  `max-age` only takes effect once a custom domain is in play. Don't "fix" the
+  mismatch. Also `X-Content-Type-Options: nosniff`,
   `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`,
   a deny-by-default `Permissions-Policy`, `Cross-Origin-Opener-Policy` and
   `Cross-Origin-Resource-Policy` set to `same-origin`.
