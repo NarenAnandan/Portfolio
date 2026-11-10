@@ -191,7 +191,7 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(
 <footer class="footer">
   <div class="wrap footer__inner">
     <p>© <span id="year">{new Date().getFullYear()}</span> {profile.fullName}</p>
-    <p>Built with Astro and <a href="https://github.com/habom2310/swarm-build" {...ext}>swarm-build</a>. No trackers, no cookies. <button class="link-btn" type="button" id="rebuild" hidden>Watch it build again</button></p>
+    <p><button class="link-btn" type="button" id="rebuild" hidden>Watch it build again</button></p>
   </div>
 </footer>
 </Base>
