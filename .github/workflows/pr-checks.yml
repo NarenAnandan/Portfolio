@@ -84,5 +84,5 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PORTFOLIO_BF3E6 }}
           projectId: portfolio-bf3e6
-          firebaseToolsVersion: 15.34.1
+          firebaseToolsVersion: 15.28.2 # last version proven with this service account; 15.34+ also needs serviceusage.services.get
           expires: 7d
