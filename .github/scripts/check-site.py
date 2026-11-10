@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Pre-merge checks for the portfolio site.
 
-Zero dependencies, no network. Run locally before pushing:
+Zero dependencies, no network. Runs against the built site in dist/, so build first:
 
-    python3 .github/scripts/check-site.py
+    npm run build && python3 .github/scripts/check-site.py
 
 Every check here guards something that fails *silently* in a browser — the
 kind of regression a human reading a diff will not catch.
@@ -14,13 +14,14 @@ import pathlib
 import re
 import sys
 
-ROOT = pathlib.Path(__file__).resolve().parents[2]
-HTML = sorted(ROOT.glob("*.html"))
+# Firebase Hosting serves dist/ (see "public" in firebase.json); everything here checks that.
+ROOT = pathlib.Path(__file__).resolve().parents[2] / "dist"
+if not (ROOT / "index.html").exists():
+    sys.exit(f"{ROOT} has no index.html: run `npm run build` first")
+HTML = sorted(ROOT.rglob("*.html"))
 
-# Files Firebase Hosting will not upload (kept in step with firebase.json).
-IGNORED_DIRS = {".git", ".github", ".firebase", "node_modules"}
-IGNORED_NAMES = {"firebase.json", ".gitignore", ".DS_Store", "LICENSE"}
-IGNORED_SUFFIXES = {".sh", ".md", ".py"}
+# Files Firebase Hosting will not upload (kept in step with firebase.json "ignore").
+IGNORED_NAMES = {".DS_Store"}
 
 PAYLOAD_BUDGET_KB = 600
 
@@ -42,9 +43,7 @@ def deployed_files():
         if not path.is_file():
             continue
         rel = path.relative_to(ROOT)
-        if set(rel.parts) & IGNORED_DIRS:
-            continue
-        if rel.name in IGNORED_NAMES or rel.suffix in IGNORED_SUFFIXES:
+        if rel.name in IGNORED_NAMES or rel.name.startswith(".env"):
             continue
         yield rel, path
 
@@ -56,7 +55,7 @@ INLINE = re.compile(
     r"<script(?![^>]*\bsrc=)[^>]*>"
     r"|<style[\s>]"
     r"|\sstyle="
-    r"|\son(?:click|load|error|mouseover|focus|blur|submit|change|input)=",
+    r"|\son[a-z]+\s*=",  # any inline event handler
     re.I,
 )
 hits = []
@@ -82,7 +81,16 @@ for f in HTML:
             target = ROOT / ref.lstrip("/").removeprefix("./").split("?")[0]
             if not target.exists():
                 broken.append(f"{f.relative_to(ROOT)}:{n}: {ref}")
-check("every local href/src resolves", not broken, "\n".join(broken))
+# ES module imports and CSS url()s are fetched by the browser too; a broken path fails silently.
+IMPORT = re.compile(r"""(?:\bfrom\s+|\bimport\s*\(?\s*)['"](/[^'"]+)['"]""")
+CSS_URL = re.compile(r"""url\(\s*['"]?(/[^)'"]+)['"]?\s*\)""")
+for pattern, files in ((IMPORT, ROOT.rglob("*.js")), (CSS_URL, ROOT.rglob("*.css"))):
+    for f in sorted(files):
+        for n, line in enumerate(f.read_text(encoding="utf-8").splitlines(), 1):
+            for ref in pattern.findall(line):
+                if not (ROOT / ref.lstrip("/").split("?")[0]).exists():
+                    broken.append(f"{f.relative_to(ROOT)}:{n}: {ref}")
+check("every local href/src, JS import and CSS url() resolves", not broken, "\n".join(broken))
 
 # --- 3. external links carry rel="noopener" ---------------------------------
 ANCHOR = re.compile(r"<a\b[^>]*>", re.I)

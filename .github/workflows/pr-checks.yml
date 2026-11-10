@@ -1,7 +1,7 @@
 name: PR checks
 
-# Deliberately separate from the deploy workflow. That one has exactly one job —
-# ship to the live channel — and nothing here can reach it.
+# Deliberately separate from the deploy workflow. That one has exactly one job that
+# ships to the live channel, and nothing here can reach it.
 on:
   pull_request:
     branches: [main]
@@ -14,25 +14,49 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  checks:
-    name: Site checks
+  # npm and the build run here, in a job with no secrets. Only the built dist/ moves on.
+  build:
+    name: Build and check
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
+      # Actions are pinned to an exact release tag, never a moving major tag like @v7.
       - name: Checkout
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
-      # Zero dependencies, no network — same script you can run locally.
+      - name: Set up Node
+        uses: actions/setup-node@v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # npm ci installs exactly what package-lock.json pins; no install scripts run.
+      - name: Build
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run build
+        env:
+          ASTRO_TELEMETRY_DISABLED: "1"
+
+      # Zero dependencies, no network; the same script you run locally after a build.
       - name: Run site checks
         run: python3 .github/scripts/check-site.py
 
+      - name: Upload the built site
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: dist
+          path: dist/
+          include-hidden-files: true # dist/.well-known/security.txt
+          retention-days: 7
+
   preview:
     name: Preview deploy
-    needs: checks
-    # Fork PRs cannot read secrets, so skip rather than fail the run.
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    needs: build
+    # Fork and Dependabot PRs cannot read these secrets, so skip rather than fail the run.
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -40,17 +64,25 @@ jobs:
       pull-requests: write # comment the preview URL on the pull request
       checks: write # the action reports its progress as a check run
     steps:
+      # firebase.json is needed for the headers; no npm install happens in this job.
       - name: Checkout
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
+
+      - name: Download the built site
+        uses: actions/download-artifact@v8.0.2
+        with:
+          name: dist
+          path: dist/
 
       # No channelId means a temporary preview channel, not the live site.
       # This is the only way to exercise the real response headers before merge.
       - name: Deploy to a preview channel
-        uses: FirebaseExtended/action-hosting-deploy@500ac625ca2dd40cbd15f7659af953801858032a # v0.11.0
+        uses: FirebaseExtended/action-hosting-deploy@v0.11.0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PORTFOLIO_BF3E6 }}
           projectId: portfolio-bf3e6
+          firebaseToolsVersion: 15.28.2 # last version proven with this service account; 15.34+ also needs serviceusage.services.get
           expires: 7d

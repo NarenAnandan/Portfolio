@@ -5,7 +5,7 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Least privilege: this job only ever needs to read the repository.
+# Least privilege: these jobs only ever need to read the repository.
 permissions:
   contents: read
 
@@ -15,29 +15,72 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # npm and the build run here, in a job with no secrets. Only the built dist/ moves on.
+  build:
+    name: Build and check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Actions are pinned to an exact release tag, never a moving major tag like @v7.
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # npm ci installs exactly what package-lock.json pins; no install scripts run.
+      - name: Build
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run build
+        env:
+          ASTRO_TELEMETRY_DISABLED: "1"
+
+      # Last line of defence: PR checks should have caught anything here first.
+      - name: Run site checks
+        run: python3 .github/scripts/check-site.py
+
+      - name: Upload the built site
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: dist
+          path: dist/
+          include-hidden-files: true # dist/.well-known/security.txt
+          retention-days: 7
+
   deploy:
-    name: Build and deploy
+    name: Deploy
+    needs: build
+    # workflow_dispatch can target any branch; only main may reach the live channel.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment:
       name: production
       url: https://portfolio-bf3e6.web.app
     steps:
-      # Third-party actions are pinned to a commit SHA, not a moving tag, so a
-      # compromised or retagged release cannot silently change what runs here.
+      # firebase.json is needed for the headers; no npm install happens in this job.
       - name: Checkout
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
-      # Last line of defence — PR checks should have caught anything here first.
-      - name: Run site checks
-        run: python3 .github/scripts/check-site.py
+      - name: Download the built site
+        uses: actions/download-artifact@v8.0.2
+        with:
+          name: dist
+          path: dist/
 
       - name: Deploy to Firebase Hosting
-        uses: FirebaseExtended/action-hosting-deploy@500ac625ca2dd40cbd15f7659af953801858032a # v0.11.0
+        uses: FirebaseExtended/action-hosting-deploy@v0.11.0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PORTFOLIO_BF3E6 }}
           channelId: live
           projectId: portfolio-bf3e6
+          firebaseToolsVersion: 15.28.2 # last version proven with this service account; 15.34+ also needs serviceusage.services.get

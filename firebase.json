@@ -1,19 +1,11 @@
 {
   "hosting": {
-    "public": ".",
+    "public": "dist",
     "cleanUrls": true,
     "trailingSlash": false,
     "ignore": [
-      "firebase.json",
-      ".git/**",
-      ".github/**",
-      ".firebase/**",
-      ".gitignore",
       "**/.DS_Store",
-      "**/node_modules/**",
-      "**/*.sh",
-      "**/*.md",
-      "LICENSE"
+      "**/.env*"
     ],
     "headers": [
       {
@@ -68,6 +60,15 @@
       },
       {
         "source": "**/*.@(woff2|svg|png|jpg|jpeg|webp|ico)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "/_astro/**",
         "headers": [
           {
             "key": "Cache-Control",
