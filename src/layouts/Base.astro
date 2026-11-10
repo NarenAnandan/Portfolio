@@ -1,0 +1,46 @@
+---
+// Shared <head> and page frame. Strict CSP: no inline <script>/<style>/style= anywhere,
+// so browser scripts are plain files in public/ linked with is:inline + src.
+import '../styles/global.css';
+
+interface Props { title: string; description: string; noindex?: boolean; swarm?: boolean }
+const { title, description, noindex = false, swarm = false } = Astro.props;
+
+// Changes on every build, so returning visitors never pair new HTML with cached old JS.
+const v = Date.now().toString(36);
+const canonical = new URL(Astro.url.pathname.replace(/(index)?\.html$/, ''), Astro.site).href;
+const csp = "default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; form-action 'none'; base-uri 'none'; frame-src 'none'; object-src 'none'; upgrade-insecure-requests";
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{title}</title>
+<meta name="description" content={description}>
+<meta name="author" content="Narendiran Anandan">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f6fa" media="(prefers-color-scheme: light)">
+{noindex && <meta name="robots" content="noindex">}
+<!-- Fallback copy; the authoritative CSP is the header in firebase.json. -->
+<meta http-equiv="Content-Security-Policy" content={csp}>
+{!noindex && <link rel="canonical" href={canonical}>}
+<link rel="preload" href="/fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/bricolage-grotesque-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="icon" href="/favicon-na.svg" type="image/svg+xml">
+<meta property="og:type" content="profile">
+<meta property="og:title" content={title}>
+<meta property="og:description" content={description}>
+<meta property="og:url" content={canonical}>
+<meta name="twitter:card" content="summary">
+<script is:inline src={`/scripts/theme.js?v=${v}`}></script>
+{swarm && <link rel="modulepreload" href="/vendor/swarm-build/swarm-build.js">}
+{swarm && <script is:inline type="module" src={`/scripts/build.js?v=${v}`}></script>}
+</head>
+<body>
+<slot />
+<script is:inline src={`/scripts/site.js?v=${v}`} defer></script>
+</body>
+</html>

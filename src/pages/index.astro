@@ -1,0 +1,198 @@
+---
+import Base from '../layouts/Base.astro';
+import { profile, rotating, topology, metrics, principles, cases, roles, earlier, skills, certifications, education } from '../data/site';
+
+const ext = { target: '_blank', rel: 'noopener noreferrer' };
+const ym = (d?: number[]) => (d ? d.join('-') : '');
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+---
+<Base swarm title="Naren Anandan — DevOps, SRE & Platform Engineer" description="Narendiran (Naren) Anandan — DevOps, SRE and platform engineer. AWS, GitHub Actions CI/CD, Elasticsearch operations, observability, incident response and developer platforms for production systems.">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="wrap masthead__inner">
+    <a class="brand" href="#top" aria-label="Naren Anandan, back to top"><span class="mark" aria-hidden="true">NA</span><b>{profile.name}</b></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#work">Work</a><a href="#experience">Experience</a><a href="#skills">Skills</a><a href="#credentials">Credentials</a><a href="#contact">Contact</a>
+    </nav>
+    <button class="theme-switch" type="button" id="theme-toggle" aria-pressed="false" aria-label="Dark theme"><span class="theme-switch__knob" aria-hidden="true"></span></button>
+  </div>
+  <span class="progress" id="progress" aria-hidden="true"></span>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero wrap" id="top">
+    <div class="hero__text">
+      <p class="eyebrow mono" data-swarm-block>DevOps · SRE · Platform Engineering</p>
+      <h1 class="hero__title" data-swarm-block>
+        <span class="sr-only">I build infrastructure that's {rotating.slice(0, -1).join(', ')} and {rotating.at(-1)}.</span>
+        <span aria-hidden="true">I build infrastructure that's <span class="rotator" id="rotator" data-words={rotating.join(',')}>{rotating[0]}</span></span>
+      </h1>
+      <p class="hero__lede" data-swarm-block>{profile.summary}</p>
+      <div class="actions">
+        <a class="btn btn--primary" href={`mailto:${profile.email}`} data-swarm-block>Email me</a>
+        <a class="btn" href={profile.resume} {...ext} data-swarm-block>Résumé <span aria-hidden="true">↗</span></a>
+        <a class="btn" href={profile.linkedin} {...ext} data-swarm-block>LinkedIn <span aria-hidden="true">↗</span></a>
+        <a class="btn" href={profile.github} {...ext} data-swarm-block>GitHub <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+
+    <figure class="topo" data-swarm-block>
+      <figcaption class="sr-only">What I work on: AWS, CI/CD, reliability and observability. Each links to the matching skills.</figcaption>
+      <svg class="topo__edges" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        {[[17, 17], [83, 17], [17, 83], [83, 83]].map(([x, y], i) => (
+          <g data-edge={topology[i].pos}>
+            <line x1="50" y1="50" x2={x} y2={y} />
+            <line class="packet" x1="50" y1="50" x2={x} y2={y} pathLength="100" />
+          </g>
+        ))}
+      </svg>
+      <div class="node node--core" data-swarm-block>
+        <span class="mark mark--lg" aria-hidden="true">NA</span>
+        <p class="node__title">{profile.name}</p>
+        <p class="node__detail">{profile.role}</p>
+        <p class="node__meta mono" id="core-years">in production since 2021</p>
+      </div>
+      {topology.map((n) => (
+        <a class={`node node--${n.pos}`} href="#skills" data-filter={slug(n.group)} data-node={n.pos} data-swarm-block>
+          <span class="node__title">{n.title}</span>
+          <span class="node__detail">{n.detail}</span>
+          <span class="node__go mono" aria-hidden="true">skills →</span>
+        </a>
+      ))}
+    </figure>
+
+    <ul class="metrics" aria-label="Selected results">
+      {metrics.map((m) => (
+        <li class="metric" data-swarm-block>
+          <span class="metric__kind mono">{m.kind}</span>
+          <b class="metric__value">{m.value}</b>
+          <span class="metric__label">{m.label}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- ================= HOW I WORK ================= -->
+  <section class="zone wrap" aria-labelledby="principles-title">
+    <p class="zone__label mono" aria-hidden="true">zone / principles</p>
+    <h2 class="zone__title" id="principles-title">How I work</h2>
+    <ol class="principles">
+      {principles.map((p, i) => (
+        <li><span class="principles__n mono" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span><h3>{p.title}</h3><p>{p.body}</p></li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- ================= SELECTED WORK ================= -->
+  <section class="zone wrap" id="work" aria-labelledby="work-title">
+    <p class="zone__label mono" aria-hidden="true">zone / work</p>
+    <h2 class="zone__title" id="work-title">Selected work</h2>
+    <p class="zone__note">Open a card for the situation, what I did and the stack. Internal names and absolute figures are left out on purpose.</p>
+    <div class="cases">
+      {cases.map((c, i) => (
+        <details class="case" open={i === 0}>
+          <summary>
+            <span class="case__tag mono">{c.tag}</span>
+            <span class="case__title">{c.title}</span>
+            <span class="case__outcome">{c.outcome}</span>
+            <span class="case__toggle" aria-hidden="true"></span>
+          </summary>
+          <div class="case__body">
+            <div><h4>Situation</h4><p>{c.situation}</p></div>
+            <div><h4>What I did</h4><p>{c.action}</p></div>
+            <ul class="chips" aria-label="Stack">{c.stack.map((s) => <li>{s}</li>)}</ul>
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- ================= EXPERIENCE ================= -->
+  <section class="zone wrap" id="experience" aria-labelledby="experience-title">
+    <p class="zone__label mono" aria-hidden="true">zone / experience</p>
+    <h2 class="zone__title" id="experience-title">Experience</h2>
+    <p class="zone__note"><span id="exp-total">5+ years</span> of continuous infrastructure work.</p>
+    <ol class="timeline" id="timeline">
+      <li class="timeline__rail" aria-hidden="true"><span class="timeline__fill" id="timeline-fill"></span></li>
+      {roles.map((r) => (
+        <li class:list={['tl', { 'tl--current': r.current }]} data-start={ym(r.start)} data-end={ym(r.end)}>
+          <span class="tl__dot" aria-hidden="true"></span>
+          <div class="tl__card">
+            <p class="tl__when mono">{r.when} <span class="tl__dur" data-duration></span></p>
+            <h3>{r.title} <span class="tl__org">· {r.org}</span></h3>
+            <p class="tl__summary">{r.summary}</p>
+            <ul class="points">{r.points.map((p) => <li>{p}</li>)}</ul>
+          </div>
+        </li>
+      ))}
+    </ol>
+    <p class="earlier">{earlier}</p>
+  </section>
+
+  <!-- ================= SKILLS ================= -->
+  <section class="zone wrap" id="skills" aria-labelledby="skills-title">
+    <p class="zone__label mono" aria-hidden="true">zone / skills</p>
+    <h2 class="zone__title" id="skills-title">Skills</h2>
+    <p class="zone__note legend-key"><span><i class="lvl lvl--prod" aria-hidden="true"></i>In production at work, every week</span><span><i class="lvl lvl--hands" aria-hidden="true"></i>Hands-on experience</span></p>
+    <div class="filters" id="skill-filters" role="group" aria-label="Show skills for" hidden>
+      <button type="button" data-filter="all" aria-pressed="true">All</button>
+      {skills.map((g) => <button type="button" data-filter={slug(g.group)} aria-pressed="false">{g.group}</button>)}
+    </div>
+    <div class="skills" id="skills-grid" aria-live="polite">
+      {skills.map((g) => (
+        <div class="skill" data-group={slug(g.group)}>
+          <h3 class="mono">{g.group}</h3>
+          <ul>
+            {g.items.map(([name, level]) => (
+              <li><i class={`lvl lvl--${level}`} aria-hidden="true"></i>{name}<span class="sr-only">{level === 'prod' ? ' (in production weekly)' : ' (hands-on)'}</span></li>
+            ))}
+          </ul>
+          <p>{g.note}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ================= CREDENTIALS ================= -->
+  <section class="zone wrap" id="credentials" aria-labelledby="credentials-title">
+    <p class="zone__label mono" aria-hidden="true">zone / credentials</p>
+    <h2 class="zone__title" id="credentials-title">Credentials</h2>
+    <p class="zone__note">Every certification opens its issuer's verification page.</p>
+    <div class="creds">
+      {certifications.map((c) => (
+        <a class="cred" href={c.url} {...ext}><span class="cred__badge mono" aria-hidden="true">cert</span><span class="cred__name">{c.name}</span><span class="cred__verify mono">verify ↗</span></a>
+      ))}
+      {education.map((e) => (
+        <div class="cred cred--edu"><span class="cred__badge mono" aria-hidden="true">edu</span><span class="cred__name">{e.name}<small>{e.where}</small></span><span class="cred__verify mono">{e.when}</span></div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section class="zone wrap contact" id="contact" aria-labelledby="contact-title">
+    <p class="zone__label mono" aria-hidden="true">zone / contact</p>
+    <div>
+      <h2 class="zone__title" id="contact-title">Let's talk.</h2>
+      <p class="contact__lede">Email is the fastest way to reach me. I usually reply within a day.</p>
+      <p class="clock mono" id="clock" hidden>It's <time id="clock-time"></time> where I am (Eastern Time).</p>
+    </div>
+    <ul class="contact__links">
+      <li><a class="contact__link" href={`mailto:${profile.email}`}><span class="mono">email</span><b>{profile.email}</b></a><button class="link-btn" type="button" id="copy-email" data-copy={profile.email}><span id="copy-label">Copy</span></button></li>
+      <li><a class="contact__link" href={profile.linkedin} {...ext}><span class="mono">linkedin</span><b>in/narenanandan ↗</b></a></li>
+      <li><a class="contact__link" href={profile.github} {...ext}><span class="mono">github</span><b>@NarenAnandan ↗</b></a></li>
+    </ul>
+    <p class="sr-only" role="status" id="copy-status"></p>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <p>© <span id="year">{new Date().getFullYear()}</span> {profile.fullName}</p>
+    <p>Built with Astro and <a href="https://github.com/habom2310/swarm-build" {...ext}>swarm-build</a>. No trackers, no cookies. <button class="link-btn" type="button" id="rebuild" hidden>Watch it build again</button></p>
+  </div>
+</footer>
+</Base>
