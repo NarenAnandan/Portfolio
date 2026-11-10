@@ -42,9 +42,9 @@ firebase.json               Hosting config: serves dist/, every security header,
 
 ## Design
 
-The visual concept is an **infrastructure diagram on a dotted canvas**. The hero is a topology (a centre node for Naren, four satellites for what he runs) that swarm-build's cursors draw node by node. Each section is a dashed "zone", like a VPC boundary in an architecture diagram, labelled `zone / work` and so on. Nothing is carried over from the previous drafting-sheet site: not its fonts, headline, location eyebrow, history bar, gauges or status dot.
+The visual concept is an **infrastructure diagram on a dotted canvas**. The hero is a topology (a centre node for Naren, four satellites for what he runs) that swarm-build's cursors draw node by node, and they go on to build each section as you scroll to it. Each section is a dashed "zone", like a VPC boundary in an architecture diagram, labelled `zone / work` and so on. Nothing is carried over from the previous drafting-sheet site: not its fonts, headline, location eyebrow, history bar, gauges or status dot.
 
-The page is written for a recruiter's first 30 seconds. The left column of the hero is plain text (role, headline, summary and contact buttons), so a skimmer never has to read the diagram. Below come how I work, case studies, experience, skills, credentials and contact. Location appears only in the contact section.
+The page is written for a recruiter's first 30 seconds. There is no logo or name mark in the top bar, only the section links and the theme switch. The left column of the hero is plain text (role, headline, summary and contact buttons), so a skimmer never has to read the diagram. Below come how I work, case studies, experience, skills, credentials and contact. Location appears only in the contact section.
 
 Dark is the default canvas; light follows the OS or the switch (`data-theme`). Bricolage Grotesque is the display face, Geist carries body text, and Geist Mono is for labels, dates and chips. Colour roles: cyan `--accent` for links, focus, packets and the centre node; green `--ok` for current and in-production; violet `--violet` for labels.
 
@@ -62,12 +62,15 @@ Skills are listed with two markers: a filled green dot for tools in production u
 
 ### The swarm-build entrance
 
-On a visitor's first page view in a browser session, five cursors named after pipeline stages (`plan`, `build`, `test`, `deploy`, `observe`) draw and fill in the hero. Elements marked `data-swarm-block` are the blocks; nested blocks (the topology nodes inside the figure) wait for their parent.
+On a visitor's first page view in a browser session, five cursors named after pipeline stages (`plan`, `build`, `test`, `deploy`, `observe`) build the whole page, block by block. Elements marked `data-swarm-block` are the blocks; nested blocks (a section's cards inside its dashed zone) wait for their parent. The hero builds straight away; every other section (`data-swarm-section`) gets its own swarm, started just before it scrolls into view, so the build follows the reader down the page.
 
-* `theme.js` adds `.swarm` to `<html>` before first paint, which hides the blocks. It skips this if the session has already seen the build, the visitor prefers reduced motion, or the browser has no ES module support.
-* `build.js` starts `swarmBuildPage`, then removes `.swarm`. If the module never runs, a CSS animation shows the blocks after 2.5 s anyway.
-* Any click, key, wheel, scroll, touch or focus change finishes the build at once, and it is capped at 6 seconds. That cap matters: blocks stay `inert` until they are built, and a screen reader in browse mode sends none of those events.
-* The footer's "Watch it build again" button replays it, moving focus to `<main>` first. It stays hidden for reduced-motion visitors.
+swarm-build keeps a block hidden and `inert` until it is built, so `build.js` limits how long and how far that can last:
+
+* `theme.js` adds `.swarm` to `<html>` before first paint, which hides only the hero's blocks. It skips this if the session has already seen the build, the visitor prefers reduced motion, or the browser has no ES module support. If `build.js` never runs, a CSS animation shows the hero after 2.5 s anyway.
+* A section is only handed to swarm-build when it is within 60% of a screen of the viewport, so content far below the fold is never hidden. A screen reader that never scrolls reads everything. Sections already on screen at load (a reload mid-page, or a `#link`) are left alone, so nothing flashes.
+* Each swarm is capped: the hero at 6 s and each section at 8 s, after which it jumps to the finished state.
+* Any click or key press finishes every running swarm and turns the effect off for the visit. Scrolling and touch-scrolling do not, because scrolling is how the build moves on.
+* The footer's "Watch it build again" button replays it from the top, moving focus to `<main>` first. It stays hidden for reduced-motion visitors.
 
 To update swarm-build, copy `src/swarm-build.js` and `LICENSE` from upstream into `public/vendor/swarm-build/`, read the diff, and watch one full build in a browser.
 

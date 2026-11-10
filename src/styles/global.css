@@ -88,17 +88,13 @@ main:focus { outline: none; }
 /* ---------- masthead + scroll progress ---------- */
 .masthead { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
 .masthead__inner { display: flex; align-items: center; gap: 1.25rem; min-height: 3.75rem; }
-.brand { display: flex; align-items: center; gap: 0.6rem; margin-right: auto; text-decoration: none; font-weight: 700; min-height: 44px; }
 .mark { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 8px; background: linear-gradient(135deg, var(--accent), var(--violet)); color: var(--btn-ink); font-family: var(--display); font-size: 0.8rem; font-weight: 800; }
-.nav { display: flex; gap: clamp(0.25rem, 1vw, 0.75rem); }
+.nav { display: flex; gap: clamp(0.25rem, 1vw, 0.75rem); flex: 1; min-width: 0; margin-left: -0.5rem; overflow-x: auto; scrollbar-width: none; }
+.nav::-webkit-scrollbar { display: none; }
 .nav a { display: inline-flex; align-items: center; min-height: 44px; padding-inline: 0.5rem; text-decoration: none; font-size: var(--step--1); font-weight: 600; color: var(--ink-2); border-radius: 8px; }
 .nav a:hover { color: var(--ink); background: var(--panel); }
 .nav a[aria-current='true'] { color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
-@media (max-width: 46rem) {
-  .masthead__inner { flex-wrap: wrap; gap: 0 1rem; padding-block: 0.25rem; }
-  .nav { order: 3; width: 100%; overflow-x: auto; scrollbar-width: none; margin-inline: -0.5rem; }
-  .nav::-webkit-scrollbar { display: none; }
-}
+@media (max-width: 46rem) { .masthead__inner { gap: 0.5rem; } .nav a { padding-inline: 0.45rem; } }
 .progress { position: absolute; left: 0; bottom: -1px; height: 2px; width: 100%; background: linear-gradient(90deg, var(--accent), var(--violet)); transform: scaleX(0); transform-origin: left; }
 
 /* The switch only works with JS, so it only shows with JS. */
@@ -292,13 +288,13 @@ a.cred:hover .cred__verify { color: var(--accent); }
 /* ---------- swarm-build entrance ----------
    theme.js adds .swarm before first paint on a visitor's first page view. The blocks stay
    hidden until build.js hands them to swarm-build; if it never runs they show after 2.5s. */
-.swarm [data-swarm-block] { visibility: hidden; animation: swarm-build-fallback 0s 2.5s forwards; }
+.swarm .hero [data-swarm-block] { visibility: hidden; animation: swarm-build-fallback 0s 2.5s forwards; }
 @keyframes swarm-build-fallback { to { visibility: visible; } }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-  .swarm [data-swarm-block] { visibility: visible; }
+  .swarm .hero [data-swarm-block] { visibility: visible; }
   .topo__edges .packet { display: none; }
   .rotator::after { display: none; }
 }
